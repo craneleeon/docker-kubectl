@@ -16,3 +16,5 @@ RUN curl -sSL https://github.com/shyiko/kubetpl/releases/download/0.9.0/kubetpl-
     bash -c '[[ $OSTYPE == darwin* ]] && echo darwin || echo linux' \
   )-amd64 -o kubetpl && chmod a+x kubetpl && mv kubetpl /usr/local/bin/
 RUN curl -L https://git.io/get_helm.sh | bash
+RUN apt-get install -y vim \
+&& rm -rf /var/lib/apt/lists/*
