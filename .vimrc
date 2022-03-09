@@ -18,7 +18,6 @@ Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
-Plug 'isRuslan/vim-es6'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'vim-scripts/matchit.zip'
@@ -26,13 +25,9 @@ Plug 'christoomey/vim-sort-motion'
 Plug 'godlygeek/tabular'
 Plug 'wellle/targets.vim'
 Plug 'chrisbra/csv.vim'
-Plug 'lervag/vimtex'
-Plug 'mhinz/vim-startify'
-Plug 'jparise/vim-graphql'
 Plug 'airblade/vim-gitgutter'
 Plug 'frazrepo/vim-rainbow'
 Plug 'chiel92/vim-autoformat'
-Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/vim-easy-align'
 Plug 'wincent/ferret'
 " Themes
@@ -42,9 +37,9 @@ Plug 'morhetz/gruvbox'
 call plug#end()
 " Put your non-Plugin stuff after this line
 
-set shell=bash\ -i
+" set shell=zsh
 set background=dark
-colorscheme gruvbox "koehler
+colorscheme gruvbox
 syntax on
 
 set statusline+=%#warningmsg#

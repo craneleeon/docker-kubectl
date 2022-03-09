@@ -7,9 +7,18 @@ ARG KUBESEAL_VERSION=v0.15.0
 ENV BASE_URL="https://get.helm.sh"
 ENV TAR_FILE="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 ENV HELM_HOME="/root/.helm"
-RUN apk add --update --no-cache curl ca-certificates openssl bash zsh git jq git vim cmatrix procps
+RUN apk add --update --no-cache curl ca-certificates openssl bash zsh git jq git vim cmatrix procps gettext rabbitmq-c-utils \
+    fzf nodejs nerd-fonts \
+    python3 &&\
+    python3 -m ensurepip && \
+    pip3 install --upgrade pip
+
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-RUN echo "source ~/powerlevel10k/powerlevel10k.zsh-theme" >>~/.zshrc
+RUN echo "source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k/powerlevel10k.zsh-theme" >>~/.zshrc
+COPY .p10k.zsh /root/.p10k.zsh
+COPY powerlevel10k.zsh-theme.zwc /root/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme.zwc
+COPY powerlevel9k.zsh-theme.zwc /root/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel9k.zsh-theme.zwc
+
 RUN curl -sSL https://github.com/shyiko/kubetpl/releases/download/0.9.0/kubetpl-0.9.0-$( \
     bash -c '[[ $OSTYPE == darwin* ]] && echo darwin || echo linux' \
   )-amd64 -o kubetpl && chmod a+x kubetpl && mv kubetpl /usr/local/bin/
@@ -48,17 +57,8 @@ RUN curl -sL "https://github.com/weaveworks/eksctl/releases/latest/download/eksc
     chmod +x /usr/bin/eksctl
 
 # Install awscli
-RUN apk add --update --no-cache python3 && \
-    python3 -m ensurepip && \
-    pip3 install --upgrade pip && \
-    pip3 install awscli && \
-    pip3 cache purge
-
-# Install jq
-RUN apk add --update --no-cache jq
-
-# Install for envsubst
-RUN apk add --update --no-cache gettext
+#     pip3 install awscli && \
+#     pip3 cache purge
 
 # Install kubeseal
 RUN curl -sL https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -o kubeseal && \
@@ -66,8 +66,11 @@ RUN curl -sL https://github.com/bitnami-labs/sealed-secrets/releases/download/${
     chmod +x /usr/bin/kubeseal
 
 # Other tools
-RUN apk add --update --no-cache fzf nodejs nerd-fonts
 COPY .vimrc /root/.vimrc
+RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+RUN echo "source /root/.p10k.zsh" >> ~/.zshrc
 
 CMD ["zsh"]
 
