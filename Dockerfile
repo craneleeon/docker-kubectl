@@ -71,6 +71,10 @@ RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 RUN echo "source /root/.p10k.zsh" >> ~/.zshrc
+RUN echo "alias l='ls -alh'" >> ~/.zshrc
+RUN echo "alias l='ls --color=auto'" >> ~/.zshrc
+
+RUN vim -T dumb -n -i NONE -es -S <(echo -e "silent! PluginInstall\nqall")
 
 CMD ["zsh"]
 
